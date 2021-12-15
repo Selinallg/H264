@@ -41,7 +41,7 @@ public class MediaCodecWrapper {
 
     long lastTimeMillis;
     long countTimeMillis;
-    int  count;
+    int count;
 
 
     // Callback when media output format changes.
@@ -141,8 +141,8 @@ public class MediaCodecWrapper {
      */
     public static MediaCodecWrapper fromVideoFormat(final MediaFormat trackFormat,
                                                     Surface surface) throws IOException {
-        MediaCodecWrapper result     = null;
-        MediaCodec        videoCodec = null;
+        MediaCodecWrapper result = null;
+        MediaCodec videoCodec = null;
 
         // BEGIN_INCLUDE(create_codec)
         final String mimeType = trackFormat.getString(MediaFormat.KEY_MIME);
@@ -152,6 +152,14 @@ public class MediaCodecWrapper {
         if (mimeType.contains("video/")) {
             videoCodec = MediaCodec.createDecoderByType(mimeType);
             videoCodec.configure(trackFormat, surface, null, 0);
+
+
+            MediaFormat newFormat = videoCodec.getOutputFormat();
+            int videoWidth = newFormat.getInteger(MediaFormat.KEY_WIDTH);
+            int videoHeight = newFormat.getInteger(MediaFormat.KEY_HEIGHT);
+
+            Log.d(TAG, "fromVideoFormat: videoWidth=" + videoWidth);
+            Log.d(TAG, "fromVideoFormat: videoHeight=" + videoHeight);
 
         }
 
@@ -188,11 +196,11 @@ public class MediaCodecWrapper {
                                final long presentationTimeUs,
                                final int flags) throws MediaCodec.CryptoException, WriteException {
         boolean result = false;
-        int     size   = input.remaining();
+        int size = input.remaining();
 
         // check if we have dequed input buffers available from the codec
         if (size > 0 && !mAvailableInputBuffers.isEmpty()) {
-            int        index  = mAvailableInputBuffers.remove();
+            int index = mAvailableInputBuffers.remove();
             ByteBuffer buffer = mInputBuffers[index];
 
             // we can't write our sample to a lesser capacity input buffer.
@@ -243,7 +251,7 @@ public class MediaCodecWrapper {
         boolean result = false;
 
         if (!mAvailableInputBuffers.isEmpty()) {
-            int        index  = mAvailableInputBuffers.remove();
+            int index = mAvailableInputBuffers.remove();
             ByteBuffer buffer = mInputBuffers[index];
 
             // reads the sample from the file using extractor into the buffer
@@ -278,8 +286,8 @@ public class MediaCodecWrapper {
         update();
         boolean result = false;
         if (!mAvailableOutputBuffers.isEmpty()) {
-            int                   index = mAvailableOutputBuffers.peek();
-            MediaCodec.BufferInfo info  = mOutputBufferInfo[index];
+            int index = mAvailableOutputBuffers.peek();
+            MediaCodec.BufferInfo info = mOutputBufferInfo[index];
             // metadata of the sample
             out_bufferInfo.set(
                     info.offset,
@@ -306,7 +314,7 @@ public class MediaCodecWrapper {
             int index = mAvailableOutputBuffers.remove();
 
             long currentTimeMillis = System.currentTimeMillis();
-            long useTime           = currentTimeMillis - lastTimeMillis;
+            long useTime = currentTimeMillis - lastTimeMillis;
             Log.d(TAG, "decodeH264: useTime=" + useTime);
             lastTimeMillis = currentTimeMillis;
 

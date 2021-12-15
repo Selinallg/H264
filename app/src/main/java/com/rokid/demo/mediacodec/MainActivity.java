@@ -51,7 +51,9 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
     // into an east to use API.
     private MediaCodecWrapper mCodecWrapper;
     //    String path = Environment.getExternalStorageDirectory() + "/capture.h265";
-    String path = Environment.getExternalStorageDirectory() + "/4k_24FPS_14Mbps.mp4";
+//    String path = Environment.getExternalStorageDirectory() + "/4k_24FPS_14Mbps.mp4";
+//    String path = Environment.getExternalStorageDirectory() + "/VR360_1.mp4";
+    String path = Environment.getExternalStorageDirectory() + "/360上下.mp4";
     private MediaExtractor mExtractor;
 
 
